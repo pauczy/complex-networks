@@ -1,4 +1,3 @@
-
 void BFS(vector <int> *A, int start, int **odl, int*prev)
 {
   queue<int> q;
@@ -19,14 +18,14 @@ void BFS(vector <int> *A, int start, int **odl, int*prev)
     }
   }
 }
-
-int male_swiaty()
+void male_swiaty(int N)
 {
   srand (time(NULL));
 
-  int iteracje = 3;
+
   int m0 = 3; //l. węzłów w klastrze początkowym
   int m = 3; //l. nowych połączeń w każdym kroku
+  int iteracje = N - m0;
   int rozmiar = m0*(m0-1) + iteracje*(m*2);
   int siecBA[rozmiar];
   int n = iteracje + m0; //l. wezłów
@@ -103,30 +102,15 @@ int male_swiaty()
   }
   double sr_odleglosc  = (double)odleglosc / (n*(n-1));
 
-  //spr. sąsiadów
-  for(int i = 0; i < n; i++)
+  ofstream fout ("male_swiaty.txt", ios::app);
+  if (!fout.is_open())
   {
-    cout << i << ": " << A[i].size() << endl;
-    for(int j = 0; j < A[i].size(); j++)
-    {
-      cout << A[i].at(j) << ", ";
-    }
-    cout << endl;
+  	cout << "unable to open output file";
   }
+  fout << n << "\t" << sr_odleglosc << endl;
 
-  //spr. BFS
-  for (int i = 0; i < n; i++)
-  {
-    cout << "odl" << i << ": " << endl;
-    for(int j = 0; j < n; j++)
-    {
-      cout << odl[i][j] << ", ";
-    }
-    cout << endl;
 
-  }
 
-  cout << sr_odleglosc << endl;
 
-  return 0;
+
 }
