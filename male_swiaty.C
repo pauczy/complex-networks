@@ -1,17 +1,18 @@
-void BFS(vector <int> *A, int start, int *odl, int*prev)
+
+void BFS(vector <int> *A, int start, int **odl, int*prev)
 {
   queue<int> q;
   q.push(start);
-  odl[start] = 0;
+  odl[start][start] = 0;
   while(!q.empty())
   {
     int u = q.front();
     q.pop();
     for(int i = 0; i < A[u].size(); i++)
     {
-      if(odl[A[u].at(i)] == -1)
+      if(odl[start][A[u].at(i)] == -1)
       {
-        odl[A[u].at(i)] = odl[u]+1;
+        odl[start][A[u].at(i)] = odl[start][u]+1;
         prev[A[u].at(i)] = u;
         q.push(A[u].at(i));
       }
@@ -23,7 +24,7 @@ int male_swiaty()
 {
   srand (time(NULL));
 
-  int iteracje = 5;
+  int iteracje = 3;
   int m0 = 3; //l. węzłów w klastrze początkowym
   int m = 3; //l. nowych połączeń w każdym kroku
   int rozmiar = m0*(m0-1) + iteracje*(m*2);
@@ -31,13 +32,20 @@ int male_swiaty()
   int n = iteracje + m0; //l. wezłów
 
   vector <int> A[n]; //tablica wektorów do przechowywania sąsiadów
-  int odl[n]; //tablica odległości od węzła pocz.
   int prev[n]; //tablica przodków
+  int **odl = new int*[n]; //tablica odległości od węzła pocz.
+  for(int i = 0; i < n; i++)
+  {
+    odl[i] = new int[n];
+  }
 
   for(int i = 0; i < n; i++)
   {
-    odl[i] = -1;
     prev[i] = -1;
+    for(int j = 0; j < n; j++)
+    {
+      odl[i][j] = -1;
+    }
   }
 
 
@@ -87,8 +95,13 @@ int male_swiaty()
   }
 
   //przeszukiwanie wszerz
-  BFS(A, 0, odl, prev);
-
+  int odleglosc = 0;
+  for(int i = 0; i < n; i++)
+  {
+    BFS(A, i, odl, prev);
+    odleglosc += accumulate(odl[i], odl[i]+n, 0);
+  }
+  double sr_odleglosc  = (double)odleglosc / (n*(n-1));
 
   //spr. sąsiadów
   for(int i = 0; i < n; i++)
@@ -104,10 +117,16 @@ int male_swiaty()
   //spr. BFS
   for (int i = 0; i < n; i++)
   {
-    cout << i << ": " << odl[i] << endl;
+    cout << "odl" << i << ": " << endl;
+    for(int j = 0; j < n; j++)
+    {
+      cout << odl[i][j] << ", ";
+    }
+    cout << endl;
+
   }
 
-
+  cout << sr_odleglosc << endl;
 
   return 0;
 }
