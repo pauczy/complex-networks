@@ -1,3 +1,5 @@
+//wykres średniej najkrótszej drogi w funkcji rozmiaru sieci (sprawdzenie efektu małych światów)
+
 void male_swiaty_wykres()
 {
   ifstream fin;
